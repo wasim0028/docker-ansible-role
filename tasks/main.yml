@@ -1,0 +1,21 @@
+---
+- name: Download the Docker installation script
+  ansible.builtin.get_url:
+    # Use the clean URL without wget flags
+    url: https://raw.githubusercontent.com/lerndevops/labs/master/scripts/installDocker.sh
+    # This replaces the "-P /tmp" flag
+    dest: /tmp/installDocker.sh
+    mode: '0755'
+
+- name: Execute the Docker installation script
+  ansible.builtin.shell: /tmp/installDocker.sh
+  args:
+    executable: /bin/bash
+    creates: /usr/bin/docker
+
+- name: Verify Docker service is started
+  ansible.builtin.service:
+    name: docker
+    state: started
+    enabled: yes
+
